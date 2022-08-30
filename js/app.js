@@ -43,7 +43,7 @@ const displayPhones = (phones, dataLimit) =>{
                         <div class="card-body">
                           <h5 class="card-title">${phone.phone_name}</h5>
                           <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero sed voluptates quos quam nihil facilis qui corporis magnam reprehenderit architecto!</p>
-                          <button onclick = "loadPhoneDetails('${phone.slug}')" href="#" class="btn btn-primary">Show Details</button>
+                          <button onclick = "loadPhoneDetails('${phone.slug}')" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#phoneDetailModal">Show Details</button>
                         </div>
                       </div>
         `;
@@ -109,8 +109,22 @@ const loadPhoneDetails = async id =>{
     const url = `https://openapi.programming-hero.com/api/phone/${id}`;
     const res = await fetch(url);
     const data = await res.json();
-    console.log(data.data);
+    // console.log(data.data);
+    displayPhoneDetails(data.data);
 }
 
-loadPhones("");
+const displayPhoneDetails = phone =>{
+    console.log(phone);
+    const modalTitle = document.getElementById('phoneDetailModalLabel');
+    modalTitle.innerText = phone.name;
+    const phoneDetails = document.getElementById('phone-details');
+    phoneDetails.innerHTML = `
+    <p>Release Date:${phone.releaseDate ? phone.releaseDate :'No Release Date Found'}</p>
+    <p>Storage:${phone.mainFeatures ? phone.mainFeatures.storage : 'No Storage Information'}</p>
+    <p>Others:${phone.others ? phone.others.Bluetooth :'No Bluetooth Information'} </P>
+
+    `
+}
+
+loadPhones("apple");
 
